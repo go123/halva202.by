@@ -56,11 +56,13 @@ AppAsset::register($this);
             ['label' => $dictionary['orderWebsite'], 'url' => 'http://cvr.by/'],
         ]],
 		['label' => 'other', /* 'url' => ['product/index'], */ 'items' => [
-            ['label' => 'Yandex-disk', 'url' => ['site/tutor', /* 'tag' => 'new' */]],
-            ['label' => 'Yandex-disk', 'url' => ['site/tutor', /* 'tag' => 'new' */]],
-            ['label' => 'Yandex-disk', 'url' => 'http://cvr.by/'],
-            ['label' => 'Реквизиты для оплаты', 'url' => 'http://cvr.by/'],
-            ['label' => 'Реквизиты для оплаты', 'url' => 'http://cvr.by/'],
+            ['label' => 'Yandex-disk', 'items' => [
+				['label' => 'tutor', 'url' => 'https://yadi.sk/d/ijt3okO9q3aqR'],
+				['label' => 'notebook', 'url' => 'https://yadi.sk/d/NXMIqBYLoyb7b'],
+			]],
+            ['label' => 'Календарь', 'url' => 'https://calendar.yandex.ru/week?embed&private_token=bb07b200d6f883707f1f430e8dfad8b46dc5053d&tz_id=Europe/Minsk'],
+            ['label' => 'Репозитории', 'url' => 'https://github.com/halva202'],
+            ['label' => 'Реквизиты для оплаты', 'url' => ['site/money', ]],
         ]],
 		// ['label' => $dictionary['tutor'], 'url' => ['/site/tutor']],
 		// ['label' => $dictionary['cooperation'], 'url' => ['/site/cooperation']],
