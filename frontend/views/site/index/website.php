@@ -1,0 +1,1 @@
+<p>Please, visit <a href="http://cvr.by/">cvr.by</a></p>
