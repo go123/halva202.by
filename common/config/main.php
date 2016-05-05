@@ -25,9 +25,5 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
         ],
-		'request' => [
-            'enableCsrfValidation' => false,
-			'enableCookieValidation' => false
-        ],
     ],
 ];
