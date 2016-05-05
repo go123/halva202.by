@@ -1,6 +1,7 @@
 <?php
 return [
     'language' => 'ru-RU',
+	'timeZone' => 'Europe/Minsk',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
 		'authManager' => [
@@ -14,6 +15,12 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+		// чтобы свои формы работали
+		'request' => [
+            'enableCsrfValidation' => false,
+			'enableCookieValidation' => false
+        ],
+		// / чтобы свои формы работали
 		'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
