@@ -64,7 +64,8 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        // return $this->render('index');
+		return $this->redirect(\Yii::$app->urlManager->createUrl('/userprofile/index'));
     }
 
     public function actionLogin()
@@ -106,7 +107,7 @@ class SiteController extends Controller
 					// $model2->usernameUser = $username;
 					$model2->insert();
 					
-					// add new columns to result
+					/* // add new columns to result
 					$migration = new Migration;
 					
 					$migration->addColumn ( $table='result', $column='comment_TutorAboutPupil'.$idUser, $type='TEXT NOT NULL' );
@@ -137,7 +138,7 @@ class SiteController extends Controller
 					
 					
 					$migration->addColumn ( $table='result', $column='moderationPupil'.$idUser, $type='INT NOT NULL' );
-					// /add new columns to result
+					// /add new columns to result */
 				
 				return $this->render('userCreated');
 				

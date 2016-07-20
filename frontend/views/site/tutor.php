@@ -1,7 +1,7 @@
 <?php use yii\helpers\Url; ?>
 <br><br>
 <?php if (!Yii::$app->user->isGuest): ?>
-<p><a href="<?= Url::to(['tutor/index2']) ?>">Личный кабинет</a></p>
+<p><a href="<?= Url::to(['result/index']) ?>">Results</a></p>
 <?php endif; ?>
 
 <p><a class="btn btn-default" href="http://repetitor.github.io/">Сайт до... &raquo;</a></p>
@@ -53,119 +53,65 @@
 		<p><img src="/images/ava/avaTutor.jpg" alt="ava" width="30%" /></p>
 	</div>
 	
-	<div class="block">
+	<!-- <div class="block">
 	<p> Спонтанное видео о себе, чисто чтобы вкратце приставить кто я такой (ссылки, упомянутые в видео, находятся в описании под роликом на <a href="https://www.youtube.com/embed/ABuvvpmEGGE" target="blank">ютюбе</a>.)</p> 
 		<iframe width="420" height="315" src="https://www.youtube.com/embed/ABuvvpmEGGE" frameborder="0" allowfullscreen></iframe>
-	</div>
+	</div> -->
 	
 	<div class="block">
 		Место проведения занятий: у ученика<br>
 		Длительность одного занятия: 80 минут<br>
-		Стоимость одного занятия: <span id="startPrice">350.000</span> BR<br><br>
+		Стоимость одного занятия: <span id="startPrice">35 </span> BYN <br><br>
 		Примечание: оплата меняется в соответствии с изменением минимальной базовой величины в Республике Беларусь<br><br>
 		Примечание 2: цена может уменьшится (зависимости от того где живете, как часто занимаемся, регулярность + другие факторы). Т.е. я полагаю так: мои объявления вы находите на репетиторских сайтах, где видете цену  350.000. Получается, если вас цена такая устраивает, тогда меньшая цена тем более должна устроить) В-общем, если называю меньшую цену - не смущайтесь) <br>
 	</div>
 
 	
 	
-<div id="goodPriceNew" class="borderRadius">
+<div id="goodPrice" class="borderRadius">
 
 <p> А можно еще дешевле) </p>
 
 <p>
-Длительность занятия: 
-<input type="radio" checked="checked" name="duration" value="0.4761"/>50 мин
-<input type="radio" name="duration"  value="0.7619"/>80 мин
+Начало занятия: 
+<input type="radio" name="timeStart" value="0"/>13:40
+<input type="radio" name="timeStart" value="1"/>14:10
+<input type="radio" name="timeStart" value="2"/>14:40
+<input type="radio" name="timeStart" value="3"/>15:10
+<input type="radio" name="timeStart" value="4" checked="checked"/>15:40
+<input type="radio" name="timeStart" value="5"/>16:10
+<input type="radio" name="timeStart" value="6"/>16:40
+<input type="radio" name="timeStart" value="7"/>17:10
 </p>
 
 <p>
-Способы оплаты: 
-<input type="radio" checked="checked" name="wayOfPay"  value="0"/>Перевод на счет
-<input type="radio" name="wayOfPay"  value="0.0238"/>Наличными
+Длительность занятия: 
+<input type="radio" name="duration" value="1"/>20 мин
+<input type="radio" name="duration" value="2" checked="checked"/>50 мин
+<input type="radio" name="duration" value="3"/>80 мин
+<input type="radio" name="duration" value="4"/>110 мин
 </p>
 
 <p>
 Место проведения занятия: 
-<input type="radio" checked="checked" name="place"  value="0"/>online
-<input type="radio" name="place"  value="0.0952"/>у преподавателя
-<input type="radio" name="place"  value="0.6667"/>выезд на дом к ученику
+<input type="radio" name="place"  value="online" checked="checked"/>online
+<input type="radio" name="place"  value="flat"/>у преподавателя
+<input type="radio" name="place"  value="pupil"/>выезд на дом к ученику
+</p>
+
+<p>
+Способ оплаты: 
+<input type="radio" name="wayOfPay"  value="transfer"  checked="checked"/>Перевод на счет
+<input type="radio" name="wayOfPay"  value="cash"/>Наличными
 </p>
 
 <p>
 Время оплаты: 
-<input type="radio" name="timeOfPay"  value="0"/>вперед на 2 недели (занятия по конкретному графику)
-<input type="radio" checked="checked" name="timeOfPay"  value="0.0714"/>перед занятием
-<input type="radio" name="timeOfPay"  value="0.0952"/>другой вариант
+<input type="radio" name="timeOfPay"  value="moneyBefore"/>перед занятием
+<input type="radio" name="timeOfPay"  value="moneyAfter" checked="checked"/>после занятия
 </p>
 
-<p></p>
-<p><span class="textRed">В результате: </span> <span id="generalSum">140 000</span> BR</p>
-<p>Минимальная цена: <span id="generalSumMin">125 000</span> BR</p><br>
-<p> У меня часто спрашивают: в каком режиме лучше заниматься? И я отвечаю: поначалу, недели 2-3-4, усиленно занятия проводить при личной встрече (чисто чтобы самое-самое основное заложить), а потом все больше переходить на онлайн.</p>
-</div>
-<script>
-	mbv=210000;/* minimal basic value (start of 2016 year), br */
-	mbvNow=210000;/* minimal basic value (now), br */
-	
-	init=25000;/* start of lesson (start of 2016 year), br*/
-	initCoefficient=init/mbv;
-	initNow=initCoefficient*mbvNow;
-	
-	/* чисто для справки */
-	value50min=100000;
-	value50minCoefficient=value50min/mbv;
-	value50minNow=value50minCoefficient*mbvNow;
-	
-	value100min=160000;
-	value100minCoefficient=value100min/mbv;
-	value100minNow=value100minCoefficient*mbvNow;
-	/* /чисто для справки */
-	
-	var div = document.getElementById('goodPriceNew');
-	div.addEventListener('click', countResult, false);
- 
-    function countResult() {
-		durationNow=valueNow('duration');
-		wayOfPayNow=valueNow('wayOfPay');
-		placeNow=valueNow('place');
-		timeOfPayNow=valueNow('timeOfPay');
-		function valueNow(nameValue){
-			on = document.getElementsByName(nameValue);
-			for (i=0; i<on.length; i++){
-				if (on[i].checked){
-					numberNow=on[i].value;
-					return numberNow*mbvNow;
-				} 
-			}
-		}
-		
-		result=initNow + durationNow + wayOfPayNow + placeNow + timeOfPayNow;
-		result=result.toFixed(0);
-		result=formatStr(result);
-		document.getElementById('generalSum').innerHTML = result;
-		
-			/* перевод в денежный формат */
-			function formatStr(str) {
-				str = str.replace(/(\.(.*))/g, '');
-				var arr = str.split('');
-				var str_temp = '';
-				if (str.length > 3) {
-					for (var i = arr.length - 1, j = 1; i >= 0; i--, j++) {
-						str_temp = arr[i] + str_temp;
-						if (j % 3 == 0) {
-							str_temp = ' ' + str_temp;
-						}
-					}
-					return str_temp;
-				} else {
-					return str;
-				}
-			}
-			/* /перевод в денежный формат */
-		
-	}
-	
-</script>
+<p><span class="textRed">В результате: </span> <span id="generalSum">13.4</span> BYN</p>
 
 <!-- конвертер валют -->
 <style>
@@ -182,6 +128,210 @@
 </div>
 
 
+<script>
+
+	mbvNow = 21; /* minimal basic value (now), br (160528 - 210.000 br)*/
+	minPrice = 0.3 * mbvNow; /*price of 20 min lesson on skype - 62.000 br => 62.000/210.000 = 0.3 */
+	increasePrice = 0.005 * mbvNow; /*каждые полчаса цена за полчаса увеличивается на 1.000 br => 1.000 / 210.000 = 0.005 */
+	rentPrice = 0.06 * mbvNow; /*если у меня дома, то каждые полчаса к цене добавляется 12.000 br => 12.000 / 210.000 = 0.06 */
+	
+	var div = document.getElementById('goodPrice');
+	div.addEventListener('click', countResult, false);
+	
+	/* финальный подсчет */
+	function countResult() {
+		timeStart = valueNow('timeStart'); timeStart = parseInt(timeStart);
+		duration = valueNow('duration'); duration = parseInt(duration);
+		place = valueNow('place');
+		wayOfPay = valueNow('wayOfPay');
+		timeOfPay = valueNow('timeOfPay');
+		function valueNow(nameValue){
+			on = document.getElementsByName(nameValue);
+			for (i=0; i<on.length; i++){
+				if (on[i].checked){
+					valueNowResult=on[i].value;
+					return valueNowResult;
+				} 
+			}
+		}
+		if(place=='online'){
+			price = (minPrice + timeStart * increasePrice) * duration;
+		}
+		if(place=='flat'){
+			price = (minPrice + timeStart * increasePrice + rentPrice) * duration;
+		}
+		if(place=='pupil'){
+			duration = duration + 2;
+			price = (minPrice + timeStart * increasePrice) * duration;
+		}
+		
+		if(wayOfPay=='cash'){
+			price = price + increasePrice;
+		}
+		
+		if(timeOfPay=='moneyBefore'){
+			price = price - increasePrice;
+		}
+		
+		result = price; // цена за занятие
+		result=result.toFixed(0);
+		result=formatStr(result);
+		document.getElementById('generalSum').innerHTML = result;
+	}
+	/* /финальный подсчет */
+	
+	/* перевод в денежный формат */
+	function formatStr(str) {
+		str = str.replace(/(\.(.*))/g, '');
+		var arr = str.split('');
+		var str_temp = '';
+		if (str.length > 3) {
+			for (var i = arr.length - 1, j = 1; i >= 0; i--, j++) {
+				str_temp = arr[i] + str_temp;
+				if (j % 3 == 0) {
+					str_temp = ' ' + str_temp;
+				}
+			}
+			return str_temp;
+		} else {
+			return str;
+		}
+	}
+	/* /перевод в денежный формат */
+	
+</script>
+
+<table rules="all">
+	<tr>
+		<td>start\day</td>
+		<td>понедельник</td>
+		<td>вторник</td>
+		<td>среда</td>
+		<td>четверг</td>
+		<td>пятница</td>
+	</tr>
+	<tr>
+		<td>13:40</td>
+		<td>забронировано</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>14:10</td>
+		<td>забронировано</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>14:40</td>
+		<td>забронировано</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>15:10</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>15:40</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>16:10</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>16:40</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>17:10</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+</table>
+
+</div>
+
+<?php
+
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+
+/* @var $this yii\web\View */
+/* @var $model app\models\Ordermy */
+/* @var $form yii\widgets\ActiveForm */
+?>
+
+<div class="borderRadius">
+<p>
+Если вам по душе заниматься в группе, возможно, вас заинтересует следующее. Собираемся у меня дома (адрес смотреть в контактах) либо онлайн, занимаемся 90 минут. Стоимость занятия (250 000) делится на всех пропорционально (чем больше людей, тем меньше стоимость).<br>
+Понравившиеся варианты отметьте галочками. <br>
+</p>
+
+<div class="ordermy-form">
+
+    <?php $form = ActiveForm::begin(); ?>
+	
+	<?= $form->field($model, 'web')->checkbox() ?>
+
+    <?= $form->field($model, 'phys')->checkbox() ?>
+
+    <?= $form->field($model, 'math')->checkbox() ?>
+
+    <?= $form->field($model, 'chem')->checkbox() ?>
+
+    <?= $form->field($model, 'go')->checkbox() ?>
+
+    <?= $form->field($model, 'many')->checkbox() ?>
+
+    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'comment')->textarea(['rows' => 6])->label('Пожелания,предложения, дополнительные контакты, комментарии') ?>
+	
+	<p>
+	Как только будет происходить движение по вашему вопросу, вам сразу же на емэйл будет приходить сообщение. Как только группа будет сформирована, также придет email-сообщение и я вам позвоню.
+	</p>
+
+    <div class="form-group">
+        <?= Html::submitButton($model->isNewRecord ? 'подписаться на новости' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
+
+</div>
+
+</div>
+
+
+
+
+
 
 
 <div class="borderRadius">
@@ -192,7 +342,7 @@
 		<br>
 		webmoney: B162201832503, R343957611880; U429489918152;<br>
         <br>
-        PayPal: v.getpost@gmail.com;<br>
+        PayPal: halva202@gmail.com;<br>
 		<!--перевод на карточку МТБанка: 4177 5311 6696 0792, VIKTAR AKULENKA, 08/18;<br>
 		перевод на карточку Белинвестбанка: 5578 8434 2001 0690, VIKTAR AKULENKA, 04/18;<br>
 		перевод на карточку Беларусбанка: 4255 2005 7760 4119, VIKTAR AKULENKA, 09/18;<br>-->

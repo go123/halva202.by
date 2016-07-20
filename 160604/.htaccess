@@ -1,0 +1,44 @@
+<IfModule mod_rewrite.c>
+    #Options +FollowSymlinks
+	#Options Indexes
+    RewriteEngine On
+</IfModule>
+ 
+<IfModule mod_rewrite.c>
+	#test
+	RewriteCond %{REQUEST_URI} ^/(ptest2)
+	#RewriteCond %{REQUEST_URI} ptest2$
+	#RewriteRule ^.*$ ptest2/test.php [L]
+	
+    RewriteRule ^ptest2/img/(.*)$ ptest2/img/$1 [L]
+	
+	
+	RewriteRule ^ptest2/.*$ ptest2/ [L]
+	
+	#files
+	#RewriteCond %{REQUEST_URI} ^/(files)
+    #RewriteRule ^files/(.*)$ frontend/web/images/$1 [L]
+	
+    # deal with admin first
+    RewriteCond %{REQUEST_URI} ^/(admin)
+    RewriteRule ^admin/assets/(.*)$ backend/web/assets/$1 [L]
+    RewriteRule ^admin/css/(.*)$ backend/web/css/$1 [L]
+
+    RewriteCond %{REQUEST_URI} !^/backend/web/(assets|css)/
+    RewriteCond %{REQUEST_URI} ^/(admin)
+    RewriteRule ^.*$ backend/web/index.php [L]
+
+    RewriteCond %{REQUEST_URI} ^/(assets|css|js|images|center)
+    RewriteRule ^assets/(.*)$ frontend/web/assets/$1 [L]
+    RewriteRule ^css/(.*)$ frontend/web/css/$1 [L]
+    RewriteRule ^js/(.*)$ frontend/web/js/$1 [L]
+    RewriteRule ^images/(.*)$ frontend/web/images/$1 [L]
+	RewriteRule ^images/center/(.*)$ frontend/web/images/center/$1 [L]
+    RewriteRule ^(.*)$ frontend/web/$1 [L]
+
+    RewriteCond %{REQUEST_URI} !^/(frontend|backend)/web/(assets|css|js|center)/
+    RewriteCond %{REQUEST_URI} !index.php
+    RewriteCond %{REQUEST_FILENAME} !-f [OR]
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^.*$ frontend/web/index.php
+</IfModule>

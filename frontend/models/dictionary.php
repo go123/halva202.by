@@ -3,52 +3,108 @@
 namespace app\models;
 
 use Yii;
+use app\models\Dicdescription;
+
+// this file is used:
+// frontend/views/site/index.php
+// frontend/views/site/layouts/main.php
 
 $session = Yii::$app->session;
 $session->open();
 
-class dictionary{
-	function dictionaryRU(){
+class dictionary
+{
+	public static function takeTitleFromBD($titleOfView){
+		$Dicdescription=new Dicdescription;
+		$record = $Dicdescription->find()->where(['titleOfView' => $titleOfView])->one();
+		if(dictionary::getLanguage()=='ru'){
+			return $record->titleRU;
+		}
+		else{
+			return $record->titleEN;
+		}
+	}
+	public static function takeDescriptionFromBD($titleOfView){
+		$Dicdescription=new Dicdescription;
+		$record = $Dicdescription->find()->where(['titleOfView' => $titleOfView])->one();
+		if(dictionary::getLanguage()=='ru'){
+			return $record['ru'];
+		}
+		else{
+			return $record['en'];
+		}
+	}
+	public static function dictionaryEN(){
+		$dictionary=[
+			'hi'=>'Hi!',
+			'name'=>"My name is Viktar.",
+			
+			'home'=>'Home',
+			'content'=>'Content',
+			'tutor'=>'Tutor',
+			'proposals'=>'Opinion / Proposals',
+			'web'=>'site/hosting',
+			'contacts'=>'Contacts',
+			'login'=>'Login',
+			'logout'=>'Logout',
+			
+			// content
+			'study'=>'study',
+			'books'=>'books',
+			'tables'=>'chemistry tables',
+			'articles'=>'articles',
+			'cooperation'=>'cooperation',
+			'resume'=>'resume',
+			'biography'=>'biography',
+			'repositories'=>'repositories',
+			'cloud'=>'cloud',
+			'service'=>'service',
+			'orderWebsite'=>'order website / hosting',
+			'opinion'=>'opinion',
+			'money'=>'payment details / donations',
+		];
+		return $dictionary;
+	}
+	public static function dictionaryRU(){
 		$dictionary=[
 			'hi'=>'Здравствуй!',
 			'name'=>'Меня зовут Виктор.',
 			
 			'home'=>'Главная',
+			'content'=>'Меню',
 			'tutor'=>'Репетитор',
-			'cooperation'=>'Сотрудничество',
-			'orderWebsite'=>'Заказать сайт',
+			'proposals'=>'Отзывы / Предложения',
+			'web'=>'сайт/хостинг',
 			'contacts'=>'Контакты',
-			'articles'=>'Статьи',
-			'biography'=>'Биография',
 			'login'=>'Авторизация',
 			'logout'=>'Выход',
-		];
-		return $dictionary;
-	}
-	function dictionaryEN(){
-		$dictionary=[
-			'hi'=>'Hi!',
-			'name'=>"My name is Viktar. It's my a new site and I begin to translate content)",
 			
-			'home'=>'Home',
-			'tutor'=>'Tutor',
-			'cooperation'=>'Cooperation',
-			'orderWebsite'=>'Order website',
-			'contacts'=>'Contacts',
-			'articles'=>'Articles',
-			'biography'=>'Biography',
-			'login'=>'Login',
-			'logout'=>'Logout',
+			// content
+			'study'=>'учёба',
+			'books'=>'учебники',
+			'tables'=>'таблицы по химии',
+			'books'=>'учебники',
+			'articles'=>'статьи',
+			'cooperation'=>'сотрудничество',
+			'resume'=>'резюме',
+			'biography'=>'биография',
+			'repositories'=>'репозитории',
+			'cloud'=>'облако',
+			'service'=>'услуги',
+			'orderWebsite'=>'Заказать сайт / хостинг',
+			'opinion'=>'мнение',
+			'money'=>'реквизиты для оплаты / пожертвований',
+			
 		];
 		return $dictionary;
 	}
-	function getDictionary(){
-		if($this->getLanguage()=='ru'){
-			return $this->dictionaryRU();
+	public static function getDictionary(){
+		if(dictionary::getLanguage()=='ru'){
+			return dictionary::dictionaryRU();
 		}
-		else{return $this->dictionaryEN();}
+		else{return dictionary::dictionaryEN();}
 	}
-	function getLanguage(){
+	public static function getLanguage(){
 		// look for language in SESSION
 		if(isset($_SESSION['language'])){
 			if($_SESSION['language']=='ru'){$language='ru';}
@@ -63,13 +119,13 @@ class dictionary{
 			else{
 				// look for language in $_SERVER['HTTP_ACCEPT_LANGUAGE']
 				$language = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-				$this->setLanguage($language);
+				dictionary::setLanguage($language);
 			}
 		}
 		
 		return $language;
 	}
-	function setLanguage($language='en'){
+	public static function setLanguage($language='en'){
 		if($language=='ru'){
 			$_SESSION['language']='ru';
 			$_COOKIE['language']='ru';

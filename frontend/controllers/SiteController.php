@@ -13,23 +13,25 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
-use app\models\Lesson;
-use app\models\LessonSection;
-use app\models\LessonTopic;
+use app\models\Ordermy;
+
 use app\models\Userprofile;
 
-use app\models\language;
-
 use app\models\dictionary;
+// use app\models\Dicdescription;
+
+use common\models\swiftmailplus;
+
+use app\models\Result;
+use yii\data\Pagination;
+
 
 /**
  * Site controller
  */
 class SiteController extends Controller
 {
-	// public $session;
-	
-    /**
+	/**
      * @inheritdoc
      */
     public function behaviors()
@@ -73,8 +75,39 @@ class SiteController extends Controller
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
+			// 160527
+			'auth' => [
+				'class' => 'yii\authclient\AuthAction',
+				'successCallback' => [$this, 'successCallback'],
+			],
+			// /160527
         ];
     }
+	
+	public function successCallback($client)
+	{
+		$attributes = $client->getUserAttributes();
+			// user login or signup comes here
+			/*
+			Checking facebook email registered yet?
+			Maxsure your registered email when login same with facebook email
+			die(print_r($attributes));
+			*/
+			
+			// $user = \common\modules\auth\models\User::find()->where([’email’=>$attributes[’email’]])->one();
+			$user = \common\models\User::find()->where(['email'=>$attributes['email']])->one();
+			if(!empty($user)){
+				Yii::$app->user->login($user);
+			
+			}else{
+				// Save session attribute user from FB
+				$session = Yii::$app->session;
+				$session['attributes']=$attributes;
+				// redirect to form signup, variabel global set to successUrl
+				$this->successUrl = \yii\helpers\Url::to(['signup']);
+			}
+	}
+	public $successUrl = 'Success';
 
     /**
      * Displays homepage.
@@ -87,198 +120,41 @@ class SiteController extends Controller
 		$object_dictionary = new dictionary;
 		$dictionary=$object_dictionary->getDictionary();
 		// /language
-				
-		// echo'<script>alert("hi");</script>';
-		$Userprofile = new Userprofile();
-		$userprofile=$Userprofile::getUserprofile($id=Yii::$app->user->id);
-		// $userprofile=$Userprofile::getUserprofile(1);
-		if(isset($_POST['text'])){
-			// echo'<script>alert("hi");</script>';
-			$name = Userprofile::findOne(['user_id'=>$id]);
-			$name->pupilOpinion = $_POST['text'];
-			// $name->filedname2 = "about information";
-			$name->update();
-		}
-		if(isset($_POST['textLesson'])){
-			// echo'<script>alert("hi");</script>';
-			$name = Userprofile::findOne(['user_id'=>$id]);
-			$name->$_POST['nameCol'] = $_POST['textLesson'];
-			// $name->filedname2 = "about information";
-			$name->update();
-		}
-		if(isset($_POST['textSection'])){
-			$name = Userprofile::findOne(['user_id'=>$id]);
-			$name->$_POST['nameCol'] = $_POST['textSection'];
-			$name->update();
-		}
-		if(isset($_POST['textTopic'])){
-			$name = Userprofile::findOne(['user_id'=>$id]);
-			$name->$_POST['nameCol'] = $_POST['textTopic'];
-			$name->update();
-		}
 		
-		
-		$contentOfLessons=[];	
-		$model = new Lesson();
-		$lessons=$model::getLessons();
-		$model4 = new Userprofile();
-		$userprofile=$model4::getUserprofile($id=Yii::$app->user->id);
-		foreach($lessons as $lessonNote){	
-			$lesson=[$lessonNote];	
-			$model2 = new LessonSection();
-			$lessonSections=$model2::getLessonSingleSections($lesson_id=$lessonNote->id);
-			$listOfSections=[];
-			foreach($lessonSections as $sectionNote){
-				// $section=[$sectionNote->title];
-				$section=[$sectionNote];
-				$model3 = new LessonTopic();
-				$lessonTopics=$model3::getLessonSingleSectionSingleTopics($lesson_section_id=$sectionNote->id);
-				$listOfTopics=[];
-				foreach($lessonTopics as $topic){
-					array_push($listOfTopics, $topic);
-				}
-				array_push($section, $listOfTopics);
-				array_push($listOfSections, $section);
-			}	
-			array_push($lesson, $listOfSections);
-			array_push($lesson, $userprofile);
-			array_push($contentOfLessons, $lesson);
-		}
-		
+		// for showing 3 last results 
+		$query = Result::find()->where(['customer_id'=> \Yii::$app->user->id]);
 
-		/* $listOfLessons=[
-			[
-				'name1', 
-				[
-					['sec1',
-						['top1','top2'],
-					],
-					['sec2',
-						['top1','top2'],
-					],
-					['sec3',
-						['top1','top2'],
-					],
-				]
-			],
-			[
-				'name2', 
-				[
-					['sec1',
-						['top1','top2'],
-					],
-					['sec2',
-						['top1','top2'],
-					],
-					['sec3',
-						['top1','top2'],
-					],
-				]
-			],
-		]; */
+        $pagination = new Pagination([
+            'defaultPageSize' => 3,
+            'totalCount' => $query->count(),
+        ]);
+
+        $marks = $query->orderBy('timeLast desc')
+            ->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+		// /for showing 3 last results
 		
-		/* if (Yii::$app->user->isGuest){
-			return $this->render('index', [
-                'modelLessonPlus' => $listOfLessons,
-				'userprofile' => $userprofile,
-            ]);
-		}
-		else{
-			return $this->render('about');
-		} */
-		
+		// index/hi
+		$aboutMe = dictionary::takeDescriptionFromBD('site/index/hi');
+		// /index/hi
+				
 		return $this->render('index', [
-                'modelLessonPlus' => $contentOfLessons,
-				'userprofile' => $userprofile,
-				// 'language'=>$language,
-				'dictionary' => $dictionary,
+			'dictionary' => $dictionary,
+            'marks' => $marks,
+            'pagination' => $pagination,
+            'aboutMe' => $aboutMe,
         ]);
     }
-
-	public function actionTest2()
-    {
-		$Userprofile = new Userprofile();
-		$userprofile=$Userprofile::getUserprofile($id=Yii::$app->user->id);
-		// $userprofile=$Userprofile::getUserprofile(1);
-		if(isset($_POST['text'])){
-			// echo'<script>alert("hi");</script>';
-			$name = Userprofile::findOne(['user_id'=>$id]);
-			$name->pupilOpinion = $_POST['text'];
-			// $name->filedname2 = "about information";
-			$name->update();
-		}
-		if(isset($_POST['textLesson'])){
-			// echo'<script>alert("hi");</script>';
-			$name = Userprofile::findOne(['user_id'=>$id]);
-			$name->$_POST['nameCol'] = $_POST['textLesson'];
-			// $name->filedname2 = "about information";
-			$name->update();
-		}
-		if(isset($_POST['textSection'])){
-			$name = Userprofile::findOne(['user_id'=>$id]);
-			$name->$_POST['nameCol'] = $_POST['textSection'];
-			$name->update();
-		}
-		if(isset($_POST['textTopic'])){
-			$name = Userprofile::findOne(['user_id'=>$id]);
-			$name->$_POST['nameCol'] = $_POST['textTopic'];
-			$name->update();
-		}
-		
-		
-			
-		
-		$model4 = new Userprofile();
-		$userprofile=$model4::getUserprofile($id=Yii::$app->user->id);
-		
-		// create array for posting in view
-		$arrayLessons=[];
-		$modelLesson = new Lesson();
-		$lessons=$modelLesson::getLessons();
-		foreach($lessons as $lessonNote){	
-			$arrayLesson=[$lessonNote->title];
-			
-			$arraySections=[];
-			$modelLessonSection = new LessonSection();
-			$lessonSections=$modelLessonSection::getLessonSingleSections($lesson_id=$lessonNote->id);
-			foreach($lessonSections as $sectionNote){
-				$section=[$sectionNote->title];
-				// $section=[$sectionNote];
-				/* $model3 = new LessonTopic();
-				$lessonTopics=$model3::getLessonSingleSectionSingleTopics($lesson_section_id=$sectionNote->id);
-				$listOfTopics=[];
-				foreach($lessonTopics as $topic){
-					array_push($listOfTopics, $topic);
-				}
-				array_push($section, $listOfTopics); */
-				array_push($arraySections, $section);
-			}	
-			array_push($arrayLesson, $arraySections);
-			// array_push($lesson, $userprofile);
-			
-			
-			
-			array_push($arrayLessons, $arrayLesson);
-			
-			/* var_dump($lesson);
-			echo'<br>';echo'<br>';
-			
-			echo 'lessonNote - ';
-			var_dump($lessonNote);
-			echo'<br>';echo'<br>'; */
-		}
-		// /create array for posting in view
-		var_dump($arrayLessons);
-		
-		
-		echo'<br>';echo'<br>';
-		// var_dump($lessons);
-		// echo'<br>';echo'<br>';
-		/* return $this->render('test2', [
-                // 'modelLessonPlus' => $contentOfLessons,
-				// 'userprofile' => $userprofile,
-        ]); */
+	
+	/* function actionContent(){
+		return $this->render('content');
 	}
+	function actionStudy(){
+		return $this->render('study');
+	} */
+
+	
     /**
      * Logs in a user.
      *
@@ -360,6 +236,23 @@ class SiteController extends Controller
 					$model2=new Userprofile;
 					$model2->user_id = $idUser;
 					$model2->insert();
+					
+					// email
+					$modelMail = new swiftmailplus();
+					$params = [
+						// 'title' => $model->title,
+						// 'nickname' => 'кличка',
+						
+					];
+					// $modelMail->letter($subject = 'Новая инфа', $viewOfLetter = 'body', $params);
+					$data=[
+						'subject' => 'Новый пользователь',
+						'viewOfLetter' => 'body',
+						'params' => $params,
+					];
+					$modelMail->letter($data);
+					// /email
+					
                 if (Yii::$app->getUser()->login($user)) {
                     return $this->goHome();
                 }
@@ -476,7 +369,32 @@ class SiteController extends Controller
 	
 	public function actionTutor()
     {
-        return $this->render('tutor');
+		$model = new Ordermy();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+			// email
+			$modelMail = new swiftmailplus();
+			$params = [
+				// 'title' => $model->title,
+				// 'nickname' => 'кличка',
+				
+			];
+			// $modelMail->letter($subject = 'Новая инфа', $viewOfLetter = 'body', $params);
+			$data=[
+				'subject' => 'Новый заказ',
+				'viewOfLetter' => 'body',
+				'params' => $params,
+			];
+			$modelMail->letter($data);
+			// /email
+            return $this->render('tutorPost', [
+                'model' => $model,
+            ]);
+        } else {
+            return $this->render('tutor', [
+                'model' => $model,
+            ]);
+        };
     }
 	public function actionCooperation()
     {
@@ -506,5 +424,17 @@ class SiteController extends Controller
 	public function actionJournal()
     {
         return $this->render('journal');
+    }
+	public function actionVolleyball()
+    {
+        return $this->render('volleyball');
+    }
+	public function actionDonation()
+    {
+        return $this->render('donation');
+    }
+	public function actionProposals()
+    {
+        return $this->render('proposals');
     }
 }

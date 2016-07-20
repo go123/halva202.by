@@ -35,22 +35,37 @@ class ResultController extends Controller
      */
     public function actionIndex()
     {
-		// my inicialisation
 		$session = Yii::$app->session;
 		$session->open();
-		if(isset($_GET['idRequireUser'])){$_SESSION['idRequireUser']=$_GET['idRequireUser'];}
-		// $_SESSION['idRequireUser']=$_GET['idRequireUser'];
-		// Yii::$app->response->cookies->add(new \yii\web\Cookie([
-					// 'name' => 'idRequireUser',
-					// 'value' => $_GET['idRequireUser']
-				// ]));
-		// /my inicialisation
+		
+		$create='wait';// for button create
+		if(isset($_GET['center_id'])){
+			$_SESSION['arrayForSearch']=['customer_id'=>$_SESSION['customer_id'], 'center_id'=>$_GET['center_id']];
+			
+			// create result?
+			$modelForCreate = new Result;
+			$res = $modelForCreate->find()->where([
+				'customer_id'=>$_SESSION['customer_id'], 
+				'supplier_id'=>1, 
+				'center_id'=>$_GET['center_id'],
+			])->one();
+			if($res!=null){$create='wait';}
+			else{
+				$create='yes';
+				$_SESSION['center_id']=$_GET['center_id'];
+			}
+			// /create result?
+			
+		}
+		else{$_SESSION['arrayForSearch']=[/* 'customer_id'=>\Yii::$app->user->id */];}
+		
         $searchModel = new ResultSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'createButton' => $create,
         ]);
     }
 
@@ -61,11 +76,6 @@ class ResultController extends Controller
      */
     public function actionView($id)
     {
-		// session - кратковременное решение
-		$session = Yii::$app->session;
-		$session->open();
-		// /session - кратковременное решение
-		
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -78,14 +88,22 @@ class ResultController extends Controller
      */
     public function actionCreate()
     {
-        // session - кратковременное решение
 		$session = Yii::$app->session;
 		$session->open();
-		// /session - кратковременное решение
 		
         $model = new Result();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+			// update some info in table
+			$model->center_id = $_SESSION['center_id'];
+			$model->customer_id = $_SESSION['customer_id'];
+			$model->supplier_id = 1;
+			$model->timeLast = time();
+			$model->markMax = $model->mark;
+			$model->timeMax = $model->timeLast;
+			
+			$model->save();
+			// /update some info in table
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -102,14 +120,23 @@ class ResultController extends Controller
      */
     public function actionUpdate($id)
     {
-        // session - кратковременное решение
 		$session = Yii::$app->session;
 		$session->open();
-		// /session - кратковременное решение
 		
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+			
+			$model->timeLast = time();
+			$model->save();
+			
+			if($model->mark > $model->markMax){
+				
+				$model->markMax = $model->mark;
+				$model->timeMax = $model->timeLast;
+				
+				$model->save();
+			}
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
@@ -126,10 +153,8 @@ class ResultController extends Controller
      */
     public function actionDelete($id)
     {
-        // session - кратковременное решение
 		$session = Yii::$app->session;
 		$session->open();
-		// /session - кратковременное решение
 		
         $this->findModel($id)->delete();
 
@@ -145,11 +170,6 @@ class ResultController extends Controller
      */
     protected function findModel($id)
     {
-        // session - кратковременное решение
-		$session = Yii::$app->session;
-		$session->open();
-		// /session - кратковременное решение
-		
         if (($model = Result::findOne($id)) !== null) {
             return $model;
         } else {

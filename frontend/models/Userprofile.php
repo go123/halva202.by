@@ -16,7 +16,6 @@ class Userprofile extends \yii\db\ActiveRecord
         return [
             // [['user_id', 'TutorAboutPupil', 'PupilAboutTutor'], 'required'],
             [['user_id'], 'integer'],
-            [['TutorAboutPupil', 'PupilAboutTutor'], 'string'],
         ];
     }
 	public function attributeLabels()
@@ -24,8 +23,6 @@ class Userprofile extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'TutorAboutPupil' => 'Tutor About Pupil',
-            'PupilAboutTutor' => 'Pupil About Tutor',
         ];
     }
 

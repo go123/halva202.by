@@ -37,11 +37,11 @@ class UseprofileSearch extends Userprofile
      *
      * @param array $params
      *
-     * @return ActiveDataProvider
+     * @return ActiveDataProvider 
      */
     public function search($params)
     {
-        $query = Userprofile::find();
+        $query = Userprofile::find()->orderBy('id desc');
 
         // add conditions that should always apply here
 

@@ -41,21 +41,48 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
-    $menuItems = [
+	
+	if (!Yii::$app->user->isGuest){
+		if(\Yii::$app->user->identity->id==1){
+			$menuItems[] = ['label' => 'asUser', 'url' => ['/../']];
+			$menuItems[] = ['label' => 'Userprofiles', 'url' => ['/userprofile/index']];
+			$menuItems[] = ['label' => 'result', 'url' => ['/result/index']];
+			$menuItems[] = ['label' => 'Add user', 'url' => ['/site/signup']];
+			$menuItems[] = [
+				'label' => 'old', 'items' => [
+					['label' => 'Home', 'url' => ['/site/index']],
+					['label' => 'notebook', 'url' => ['/notebook/index']],
+					['label' => 'Listsql', 'url' => ['/listsql/index']],
+					['label' => 'Словарь', 'url' => ['/dictionary/index']],
+					['label' => 'Userprofiles', 'url' => ['/userprofile/index']],
+					['label' => 'Добавить пользователя', 'url' => ['/site/signup']],
+					['label' => 'Content', 'url' => ['/content/index']],
+					['label' => 'Result', 'url' => ['/result/index']],
+				]
+			];
+		}
+	}
+	
+	
+	
+	
+    /* $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
+		['label' => 'notebook', 'url' => ['/notebook/index']],
+		['label' => 'Listsql', 'url' => ['/listsql/index']],
 		['label' => 'Словарь', 'url' => ['/dictionary/index']],
 		['label' => 'Userprofile', 'url' => ['/userprofile/index']],
 		['label' => 'Добавить пользователя', 'url' => ['/site/signup']],
 		// ['label' => 'Lesson', 'url' => ['/lesson/index']],
 		// ['label' => 'Sections', 'url' => ['/lessonsection/index']],
 		// ['label' => 'Topics', 'url' => ['/lessontopic/index']],
-    ];
+    ]; */
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
-		$menuItems[] = ['label' => 'asUser', 'url' => ['/../']];
-		$menuItems[] = ['label' => 'Content', 'url' => ['/content/index']];
-		$menuItems[] = ['label' => 'Result', 'url' => ['/result/index']];
+		// $menuItems[] = ['label' => 'asUser', 'url' => ['/../']];
+		// $menuItems[] = ['label' => 'Content', 'url' => ['/content/index']];
+		
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(

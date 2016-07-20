@@ -29,14 +29,21 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+				'' => 'site/index',
+                '<action>'=>'site/<action>',
             ],
         ],
-        */
+		'assetManager' => [
+             'basePath' => '@webroot/assets',
+             'baseUrl' => '@web/assets'
+        ],  
+        'request' => [
+            'baseUrl' => '/admin'
+        ],
     ],
     'params' => $params,
 ];

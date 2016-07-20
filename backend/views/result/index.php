@@ -13,41 +13,42 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="result-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); 
-	$idUser=$_SESSION['idRequireUser'];
-	
-	?>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    
+    <p>
+		<?php
+		if($createButton == 'yes'){echo Html::a('Create Result', ['create'], ['class' => 'btn btn-success']);}
+		?>
+    </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'content_id',
-			'comment_TutorAboutPupil'.$idUser.':ntext',
-            'mark_TutorAboutPupil'.$idUser,
-            'date_TutorAboutPupil'.$idUser,
-            // 'comment_Pupil'.$idUser.'AboutTutor:ntext',
-            // 'mark_Pupil'.$idUser.'AboutTutor',
-            // 'date_Pupil'.$idUser.'AboutTutor',
-            // 'commentMaximum_TutorAboutPupil'.$idUser.':ntext',
-            // 'markMaximum_TutorAboutPupil'.$idUser,
-            // 'dateMaximum_TutorAboutPupil'.$idUser,
-            // 'commentMaximum_Pupil'.$idUser.'AboutTutor:ntext',
-            // 'markMaximum_Pupil'.$idUser.'AboutTutor',
-            // 'dateMaximum_Pupil'.$idUser.'AboutTutor',
-            // 'comment_Pupil'.$idUser.'AboutPupil'.$idUser.':ntext',
-            // 'mark_Pupil'.$idUser.'AboutPupil'.$idUser,
-            // 'date_Pupil'.$idUser.'AboutPupil'.$idUser,
-            // 'commentMaximum_Pupil'.$idUser.'AboutPupil'.$idUser.':ntext',
-            // 'markMaximum_Pupil'.$idUser.'AboutPupil'.$idUser,
-            // 'dateMaximum_Pupil'.$idUser.'AboutPupil'.$idUser,
-            // 'moderationPupil'.$idUser,
-			            
-            ['class' => 'yii\grid\ActionColumn'],
+			['class' => 'yii\grid\ActionColumn',
+				'template' => '{view} {link}',
+			],
+			
+			
+            // 'id',
+			'center.title',
+			'user.username',
+            'mark',
+            // 'comment:ntext',
+			[
+				'attribute' => 'edit',
+				'format' => 'raw',
+				'label'=>'edit',
+				'value' => function($model){
+					if($model->supplier_id == Yii::$app->user->id){
+						return Html::a('edit',['/result/update', 'id' => $model->id ]);
+					}
+					
+				},
+			],
+
+            
         ],
     ]); ?>
 </div>

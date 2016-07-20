@@ -44,6 +44,7 @@ class Userprofile extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
+            'preview' => 'Preview',
             'additionalInformation' => 'Additional Information',
         ];
     }

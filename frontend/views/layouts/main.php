@@ -29,9 +29,16 @@ AppAsset::register($this);
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name='yandex-verification' content='73e7cbfc3d02334e' />
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+	
+	
+			
+
+
+
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -43,54 +50,65 @@ AppAsset::register($this);
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top ico',
-			// 'class' => 'navbar-default navbar-fixed-left',
-			// 'class' => 'navbar-inverse navbar-fixed-left',
-			// 'class' => 'navbar-inverse navbar-static-top',
         ],
     ]);
-    $menuItems = [
-		['label' => $dictionary['home'], 'url' => ['/site/index']],
 	
-		['label' => 'service', /* 'url' => ['product/index'], */ 'items' => [
-            ['label' => $dictionary['tutor'], 'url' => ['site/tutor', /* 'tag' => 'new' */]],
-            ['label' => $dictionary['orderWebsite'], 'url' => 'http://cvr.by/'],
-        ]],
-		['label' => 'other', /* 'url' => ['product/index'], */ 'items' => [
-            ['label' => 'Yandex-disk', 'items' => [
-				['label' => 'tutor', 'url' => 'https://yadi.sk/d/ijt3okO9q3aqR'],
-				['label' => 'notebook', 'url' => 'https://yadi.sk/d/NXMIqBYLoyb7b'],
-			]],
-            ['label' => 'Календарь', 'url' => 'https://calendar.yandex.ru/week?embed&private_token=bb07b200d6f883707f1f430e8dfad8b46dc5053d&tz_id=Europe/Minsk'],
-            ['label' => 'Репозитории', 'url' => 'https://github.com/halva202'],
-            ['label' => 'Реквизиты для оплаты', 'url' => ['site/money', ]],
-        ]],
-		// ['label' => $dictionary['tutor'], 'url' => ['/site/tutor']],
-		// ['label' => $dictionary['cooperation'], 'url' => ['/site/cooperation']],
-		// ['label' => $dictionary['orderWebsite'], 'url' => 'http://cvr.by/'],
-		['label' => $dictionary['contacts'], 'url' => ['/site/contactmy']],
-		// ['label' => $dictionary['articles'], 'url' => ['/site/articles']],
-		// ['label' => $dictionary['biography'], 'url' => ['/site/biography']],
-        // ['label' => 'About', 'url' => ['/site/about']],
-        // ['label' => 'Contact', 'url' => ['/site/contact']],
-		// ['label' => 'контактные данные', 'url' => ['/site/contactmy']],
-		// ['label' => 'другое', 'url' => ['/site/other']],
-		// ['label' => 'Репетитор', 'url' => 'http://repetitor.github.io/'],
-		// ['label' => 'Сделать сайт', 'url' => 'http://cvr.by/'],
-		// ['label' => 'Английские спикин-клабы в Минске', 'url' => 'http://cvr.by/blog/istorii-uspekha/item/118-english-speaking-clubs-v-minske.html'],
-    ];
-	// if user is halva202 (in future this menu will shown foe everybody)
+	
 	if (!Yii::$app->user->isGuest){
-		$menuItems[] = ['label' => 'Journal', 'url' => ['/site/journal']];
 		if(\Yii::$app->user->identity->id==1){
-			// $menuItems[] = ['label' => 'Pupils', 'url' => ['/userprofilenew2/index']];
 			$menuItems[] = ['label' => 'asAdmin', 'url' => ['/../../admin']];
+			$menuItems[] = ['label' => 'forMe', 'items' => [
+				['label' => 'auth fb', 'url' => 'http://www.satusoftware.com/yii2-framework-login-with-facebook/'],
+				['label' => 'dic_description', 'url' => ['/dicdescription/index']]
+			]
+			
+			];
 		}
 	}
-	/* if (!Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Репетитор', 'url' => ['/site/tutor']];
-    } */
+	
+	$menuItems[] = ['label' => $dictionary['home'], 'url' => ['/site/index']];
+	$menuItems[] = ['label' => $dictionary['content'], 'url' => ['site/content'], 'items' => [
+		['label' => $dictionary['study'], 'url' => 'https://yadi.sk/d/ijt3okO9q3aqR', 'items' => [
+            ['label' => $dictionary['books'], 'url' => 'https://yadi.sk/d/ijt3okO9q3aqR'],
+            ['label' => $dictionary['tables'], 'url' => 'http://repetitor.github.io/chemistry'],
+        ]],
+		['label' => $dictionary['articles'], 'url' => ['site/articles']],
+		['label' => 'volleyball', 'url' => ['site/volleyball']],
+		// ['label' => $dictionary['cooperation'], 'url' => ['site/cooperation']],
+		['label' => $dictionary['resume'], 'items' => [
+            ['label' => 'программист - tut.by', 'url' => 'https://jobs.tut.by/applicant/resumes/view?resume=4d35b7f6ff0214120c0039ed1f59454247344b'],
+            ['label' => 'programmer - upwork.com', 'url' => 'https://www.upwork.com/freelancers/~0106dc02a6699ca661'],
+			['label' => 'репетитор - uchim.biz', 'url' => 'http://uchim.biz/board/0-0-11664-0-17'],
+        ]],
+		
+		['label' => $dictionary['biography'], 'url' => ['site/biography']],
+		['label' => $dictionary['repositories'], 'url' => 'https://github.com/halva202'],
+		['label' => $dictionary['cloud'], 'url' => 'https://yadi.sk/d/NXMIqBYLoyb7b'],
+		['label' => $dictionary['service'], 'url' => ['site/tutor'], 'items' => [
+            ['label' => $dictionary['tutor'], 'url' => ['site/tutor']],
+            ['label' => $dictionary['orderWebsite'], 'url' => 'http://cvr.by/'],
+        ]],
+		// ['label' => $dictionary['opinion'], 'url' => ['site/opinion']],
+		// ['label' => $dictionary['money'], 'url' => ['site/money']],
+		['label' => 'service payment / donation', 'url' => ['site/donation']],
+		['label' => $dictionary['proposals'], 'url' => ['site/proposals']],
+		// ['label' => $dictionary['contacts'], 'url' => ['site/contacts']],
+        ]
+	];
+	if (!Yii::$app->user->isGuest){
+			$menuItems[] = ['label' => 'Go:)', 'url' => ['/linen/index?lineParentN_id=1&futureN=2'], 
+				'items' => [
+					['label' => 'structure', 'url' => ['/linen/index?lineParentN_id=1&futureN=2']],
+					['label' => 'results', 'url' => ['/result/index']],
+				],
+			];
+	}
+	$menuItems[] = ['label' => $dictionary['tutor'], 'url' => ['site/tutor', 'tag' => 'new']];
+	$menuItems[] = ['label' => $dictionary['web'], 'url' => 'http://cvr.by/'];
+	$menuItems[] = ['label' => $dictionary['contacts'], 'url' => ['/site/contactmy']];
+	
     if (Yii::$app->user->isGuest) {
-        // $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
+        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => $dictionary['login'], 'url' => ['/site/login']];
     } else {
         $menuItems[] = '<li>'
@@ -115,25 +133,59 @@ AppAsset::register($this);
         ]) ?>
         <?= Alert::widget() ?>
 		
-		<?php
-		// $language = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-		/* $urlRu = Url::to(['set/language', 'language' => 'ru']);
-		$urlEn = Url::to(['set/language', 'language' => 'en']);
-		echo'<br>';echo'<br>';echo'<br>'; */
-		?>
 		Choose your preferred language for displaying pages:
 		<?= Html::a('Русский', ['set/language', 'language' => 'ru'], ['class'=>'btn btn-success', 'style' => 'margin:5px']) ?>
 		or
 		<?= Html::a('English', ['set/language', 'language' => 'en'], ['class'=>'btn btn-primary', 'style' => 'margin:5px']) ?>
 		
-		<?php /* if(isset($_SESSION['language'])){echo 'ses - '.$_SESSION['language']; echo'<br>';} */?>
-		<?php /* if(isset($_COOKIE['language'])){echo 'cook - '.$_COOKIE['language']; echo'<br>';} */?>
-		<?php /* if(isset($_GET['language'])){echo 'GET - '.$_GET['language']; echo'<br>';} */?>
+
 		
 		<?= $content ?>
+<!-- Yandex.Metrika informer -->
+<a href="https://metrika.yandex.by/stat/?id=37527460&amp;from=informer"
+target="_blank" rel="nofollow"><img src="https://informer.yandex.ru/informer/37527460/3_1_FFFFFFFF_EFEFEFFF_0_pageviews"
+style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" onclick="try{Ya.Metrika.informer({i:this,id:37527460,lang:'ru'});return false}catch(e){}" /></a>
+<!-- /Yandex.Metrika informer -->
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter37527460 = new Ya.Metrika({
+                    id:37527460,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/37527460" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
 		
     </div>
-	
+<script type="text/javascript">
+  VK.init({
+    apiId: 5477917
+  });
+</script>
+<div id="vk_auth"></div>
+<script type="text/javascript">
+ VK.Widgets.Auth('vk_auth', {});
+</script>	
 </div>
 
 <footer class="footer">

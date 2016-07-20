@@ -24,20 +24,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'user_id',
-            'additionalInformation:ntext',
-			
+            // 'id',
+            // 'user_id',
+			'user.username',
 			[
 				'attribute' => 'archive',
 				'format' => 'raw',
 				'label'=>'knowledge',
 				'value' => function($model){
-					return Html::a('give ',['/result/index', 'idRequireUser' => $model->user_id]);
+					return Html::a('give ',['/linen/index', 'customer_id' => $model->user_id, 'lineParentN_id' => 1, 'futureN' => 2]);
 				},
 			],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            
+            'additionalInformation:ntext',
+			['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 </div>

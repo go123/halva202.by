@@ -1,7 +1,10 @@
-# use mod_rewrite for pretty URL support
-RewriteEngine on
-# if a directory or a file exists, use the request directly
+Options +Indexes
+
+RewriteCond %{REQUEST_URI} ^/center\/.*$
+RewriteRule  ^.*$ frontend/web/images/center/$1 [L]
+
+# Если это папка или файл, открываем его
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-# otherwise forward the request to index.php
+# В противном случае перенаправляем на index.php
 RewriteRule . index.php
